@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:logletter/components/login_textfield.dart';
 import 'package:logletter/components/my_button.dart';
+import 'package:logletter/pages/home_page.dart';
+import 'package:logletter/pages/register_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -55,10 +57,11 @@ class LoginPage extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "User name",
+                    "Email",
                     style: TextStyle(
                       fontFamily: "NotoSans",
                       fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -69,7 +72,7 @@ class LoginPage extends StatelessWidget {
             ),
             MyTextField(
               controller: usernameController,
-              hintText: 'Enter your user name',
+              hintText: 'Enter your email',
               obscureText: false,
             ),
             const SizedBox(
@@ -84,6 +87,7 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: "NotoSans",
                       fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -118,7 +122,11 @@ class LoginPage extends StatelessWidget {
               height: 25,
             ),
             MyButton(
-              onTap: signUserIn,
+              buttonname: "로그인",
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const HomePage()));
+              },
             ),
             const SizedBox(
               height: 10,
@@ -135,11 +143,20 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(
                   width: 4,
                 ),
-                const Text(
-                  "Register",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterPage(),
+                        ));
+                  },
+                  child: const Text(
+                    "Register",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
