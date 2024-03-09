@@ -39,7 +39,7 @@ class UserPosts extends StatelessWidget {
           ),
         ),
         Container(
-          height: 400,
+          height: 500,
           color: Colors.grey[300],
         ),
         const Padding(

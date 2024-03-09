@@ -5,8 +5,34 @@ class UserBest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text("Best")),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Best log',
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: "Blackhansans",
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 15.0),
+                  child: Icon(Icons.notifications),
+                ),
+                Icon(Icons.settings),
+              ],
+            ),
+          ],
+        ),
+      ),
+      body: const Center(child: Text("Best")),
     );
   }
 }

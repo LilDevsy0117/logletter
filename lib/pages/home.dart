@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:logletter/components/user_post.dart';
 
 class UserHome extends StatelessWidget {
-  const UserHome({super.key});
+  final _controller = PageController(initialPage: 0);
+
+  UserHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +35,18 @@ class UserHome extends StatelessWidget {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return const UserPosts(
-                    name: '이상엽',
-                  );
-                }),
+      body: PageView(
+        controller: _controller,
+        scrollDirection: Axis.vertical,
+        children: const [
+          UserPosts(
+            name: '이상엽',
+          ),
+          UserPosts(
+            name: '이상엽',
+          ),
+          UserPosts(
+            name: '이상엽',
           ),
         ],
       ),
