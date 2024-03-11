@@ -19,6 +19,11 @@ class _UserEditState extends State<UserEdit> {
   void onDaySelected(DateTime selectedDate, DateTime focusedDate) {
     setState(() {
       this.selectedDate = selectedDate;
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DiarySheet(selectedDate: selectedDate),
+          ));
     });
   }
 
