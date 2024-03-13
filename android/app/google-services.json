@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1035842953230",
+    "project_id": "logletter-6e3b2",
+    "storage_bucket": "logletter-6e3b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035842953230:android:7858abcee1ecbd94f6dc5f",
+        "android_client_info": {
+          "package_name": "com.example.logletter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqMSpyiRRFEXn_zadUMrXldr4eMJgKTlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
