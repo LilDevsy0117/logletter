@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     const UserBest(),
     const UserEdit(),
     const UserBookmark(),
-    const UserProfile(),
+    UserProfile(),
   ];
 
   @override

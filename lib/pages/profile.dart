@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatelessWidget {
-  const UserProfile({super.key});
+  UserProfile({super.key});
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +12,10 @@ class UserProfile extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'Profile',
               style: TextStyle(
                 color: Colors.black,
@@ -22,11 +24,18 @@ class UserProfile extends StatelessWidget {
             ),
             Row(
               children: [
-                Padding(
+                MaterialButton(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                  },
+                  color: Colors.deepPurple[200],
+                  child: const Text('로그아웃'),
+                ),
+                const Padding(
                   padding: EdgeInsets.only(right: 15.0),
                   child: Icon(Icons.notifications),
                 ),
-                Icon(Icons.settings),
+                const Icon(Icons.settings),
               ],
             ),
           ],
@@ -42,11 +51,11 @@ class UserProfile extends StatelessWidget {
               color: Colors.grey[200],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(20.0),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
             child: Text(
-              "이상엽",
-              style: TextStyle(
+              user.email!,
+              style: const TextStyle(
                 fontFamily: "NotoSans",
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -139,7 +148,9 @@ class UserProfile extends StatelessWidget {
               child: GridView.builder(
                   itemCount: 7,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3),
+                    crossAxisCount: 1,
+                    childAspectRatio: 3,
+                  ),
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(2.0),

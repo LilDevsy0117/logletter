@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:logletter/pages/login_page.dart';
+import 'package:logletter/pages/main_page.dart';
 
 class LoadingLogin extends StatefulWidget {
   const LoadingLogin({
@@ -20,7 +20,7 @@ class _LoadingLoginState extends State<LoadingLogin> {
       const Duration(seconds: 1),
       () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => const MainPage()),
       ),
     );
   }
