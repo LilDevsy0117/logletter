@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:logletter/pages/main_page.dart';
+import 'package:logletter/auth/main_page.dart';
 
 class LoadingLogin extends StatefulWidget {
   const LoadingLogin({

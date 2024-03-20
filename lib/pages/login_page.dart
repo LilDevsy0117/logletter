@@ -2,29 +2,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logletter/components/login_textfield.dart';
 import 'package:logletter/components/my_button.dart';
+import 'package:logletter/pages/forgot_pw_page.dart';
 import 'package:logletter/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final VoidCallback showRegisterPage;
+  const LoginPage({super.key, required this.showRegisterPage});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   Future signIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: usernameController.text.trim(),
+      email: _emailController.text.trim(),
       password: passwordController.text.trim(),
     );
   }
 
   @override
   void dispose() {
-    usernameController.dispose();
+    _emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -89,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 10,
               ),
               MyTextField(
-                controller: usernameController,
+                controller: _emailController,
                 hintText: 'Enter your email',
                 obscureText: false,
               ),
@@ -122,15 +124,25 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 10,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      "비밀번호를 잊어버렸나요?",
-                      style: TextStyle(
-                        fontFamily: "NotoSans",
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const ForgotPasswordPage();
+                        }));
+                      },
+                      child: const Text(
+                        "비밀번호를 잊어버렸나요?",
+                        style: TextStyle(
+                          fontFamily: "NotoSans",
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -159,18 +171,15 @@ class _LoginPageState extends State<LoginPage> {
                     width: 4,
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterPage(),
-                          ));
-                    },
-                    child: const Text(
-                      "Register",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                    onTap: widget.showRegisterPage,
+                    child: GestureDetector(
+                      onTap: widget.showRegisterPage,
+                      child: const Text(
+                        "Register",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
