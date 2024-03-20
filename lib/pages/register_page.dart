@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:logletter/components/login_textfield.dart';
 import 'package:logletter/components/my_button.dart';
-import 'package:logletter/pages/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:logletter/components/login_textfield.dart';
 import 'package:logletter/components/my_button.dart';
 import 'package:logletter/pages/forgot_pw_page.dart';
-import 'package:logletter/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
