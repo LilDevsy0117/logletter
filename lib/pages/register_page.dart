@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logletter/components/login_textfield.dart';
@@ -17,23 +18,48 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _usernameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _ageController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmpasswordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _ageController.dispose();
     super.dispose();
   }
 
   Future signUp() async {
     if (passwordConfirmed()) {
+      // create user
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
+      // add user details
+      addUserDetails(
+        _firstNameController.text.trim(),
+        _lastNameController.text.trim(),
+        _emailController.text.trim(),
+        int.parse(_ageController.text.trim()),
+      );
     }
+  }
+
+  Future addUserDetails(
+      String firstName, String lastName, String email, int age) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'first name': firstName,
+      'last name': lastName,
+      'email': email,
+      'age': age,
+    });
   }
 
   bool passwordConfirmed() {
@@ -74,105 +100,52 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 20,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                children: [
-                  Text(
-                    "이름",
-                    style: TextStyle(
-                      fontFamily: "NotoSans",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 10,
+            ),
+            MyTextField(
+              controller: _firstNameController,
+              hintText: '성',
+              obscureText: false,
             ),
             const SizedBox(
               height: 10,
             ),
             MyTextField(
-              controller: _usernameController,
-              hintText: 'Enter your name',
+              controller: _lastNameController,
+              hintText: '이름',
               obscureText: false,
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                children: [
-                  Text(
-                    "Email",
-                    style: TextStyle(
-                      fontFamily: "NotoSans",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+            MyTextField(
+              controller: _ageController,
+              hintText: '나이',
+              obscureText: false,
             ),
             const SizedBox(
               height: 10,
             ),
             MyTextField(
               controller: _emailController,
-              hintText: 'Enter your email',
+              hintText: '이메일',
               obscureText: false,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                children: [
-                  Text(
-                    "비밀번호",
-                    style: TextStyle(
-                      fontFamily: "NotoSans",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
             ),
             const SizedBox(
               height: 10,
             ),
             MyTextField(
               controller: _passwordController,
-              hintText: 'Enter your Password',
+              hintText: '비밀번호',
               obscureText: false,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                children: [
-                  Text(
-                    "비밀번호 확인",
-                    style: TextStyle(
-                      fontFamily: "NotoSans",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
             ),
             const SizedBox(
               height: 10,
             ),
             MyTextField(
               controller: _confirmpasswordController,
-              hintText: 'Confirm your Password',
+              hintText: '비밀번호 확인',
               obscureText: false,
             ),
             const SizedBox(

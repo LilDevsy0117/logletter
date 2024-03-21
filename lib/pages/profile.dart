@@ -24,15 +24,14 @@ class UserProfile extends StatelessWidget {
             ),
             Row(
               children: [
-                MaterialButton(
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     FirebaseAuth.instance.signOut();
                   },
-                  color: Colors.deepPurple[200],
-                  child: const Text('로그아웃'),
+                  child: const Icon(Icons.logout),
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(right: 15.0),
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Icon(Icons.notifications),
                 ),
                 const Icon(Icons.settings),
