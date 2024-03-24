@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class UserPosts extends StatelessWidget {
   final String name;
-
-  const UserPosts({super.key, required this.name});
+  final String log;
+  const UserPosts({super.key, required this.name, required this.log});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,18 @@ class UserPosts extends StatelessWidget {
         ),
         Container(
           height: 500,
+          width: double.infinity,
           color: Colors.grey[300],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              log,
+              style: const TextStyle(
+                fontFamily: "NotoSans",
+                fontSize: 20,
+              ),
+            ),
+          ),
         ),
         const Padding(
           padding: EdgeInsets.all(16.0),

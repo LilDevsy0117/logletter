@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:logletter/firestore.dart';
 
 class DiarySheet extends StatefulWidget {
   final DateTime selectedDate;
@@ -10,6 +12,8 @@ class DiarySheet extends StatefulWidget {
 }
 
 class _DiarySheetState extends State<DiarySheet> {
+  final FirestoreService firestoreService = FirestoreService();
+  final TextEditingController textController = TextEditingController();
   late DateTime date;
 
   @override
@@ -45,36 +49,43 @@ class _DiarySheetState extends State<DiarySheet> {
               child: Column(
                 children: [
                   const ButtonBar(),
-                  TextField(
-                    controller: TextEditingController(),
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 28,
-                    decoration: const InputDecoration(
-                      hintText: "오늘 있었던 일을 알려주세요!",
-                      enabledBorder: InputBorder.none,
-                    ),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: firestoreService
+                        .getLogById(DateFormat("yyyy년 MM월 dd일").format(date)),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return TextField(
+                          controller: textController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 28,
+                          decoration: const InputDecoration(
+                            hintText: "오늘 있었던 일을 알려주세요!",
+                            enabledBorder: InputBorder.none,
+                          ),
+                        );
+                      } else {
+                        List logList = snapshot.data!.docs;
+                        DocumentSnapshot document = logList.first;
+                        Map<String, dynamic> data =
+                            document.data() as Map<String, dynamic>;
+                        String logText = data['log'];
+                        return TextField(
+                          controller: textController..text = logText,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 28,
+                          decoration: const InputDecoration(
+                            enabledBorder: InputBorder.none,
+                          ),
+                        );
+                      }
+                    },
                   ),
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(10),
-                  //     ),
-                  //     backgroundColor: const Color(0xff5F6BBA),
-                  //     foregroundColor: Colors.white,
-                  //     textStyle: const TextStyle(
-                  //       fontFamily: "NotoSans",
-                  //       fontSize: 15,
-                  //       fontWeight: FontWeight.w600,
-                  //     ),
-                  //   ),
-                  //   onPressed: () {
-                  //     print('submit');
-                  //   },
-                  //   child: const Text('기록하기'),
-                  // ),
                   GestureDetector(
                     onTap: () {
-                      print('submit');
+                      firestoreService.addLog(textController.text,
+                          DateFormat("yyyy년 MM월 dd일").format(date));
+                      textController.clear();
+                      Navigator.pop(context);
                     },
                     child: Container(
                       width: 150,
