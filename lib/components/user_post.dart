@@ -20,7 +20,7 @@ class UserPosts extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: Theme.of(context).colorScheme.secondary,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -41,7 +41,7 @@ class UserPosts extends StatelessWidget {
         Container(
           height: 500,
           width: double.infinity,
-          color: Colors.grey[300],
+          color: Theme.of(context).colorScheme.secondary,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

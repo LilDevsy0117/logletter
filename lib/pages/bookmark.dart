@@ -5,8 +5,34 @@ class UserBookmark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text("Bookmark")),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '구독한 기록',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontFamily: "Blackhansans",
+              ),
+            ),
+            const Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 15.0),
+                  child: Icon(Icons.notifications),
+                ),
+                Icon(Icons.settings),
+              ],
+            ),
+          ],
+        ),
+      ),
+      body: const Center(child: Text("Bookmark")),
     );
   }
 }

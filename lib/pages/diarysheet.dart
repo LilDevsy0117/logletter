@@ -15,11 +15,61 @@ class _DiarySheetState extends State<DiarySheet> {
   final FirestoreService firestoreService = FirestoreService();
   final TextEditingController textController = TextEditingController();
   late DateTime date;
+  late String? docID;
 
   @override
   void initState() {
     super.initState();
     date = widget.selectedDate;
+    getDocumentID();
+  }
+
+  // 문서 ID를 가져오는 함수
+  void getDocumentID() async {
+    String id = await firestoreService
+        .getLogDocumentID(DateFormat("yyyy년 MM월 dd일").format(date));
+    setState(() {
+      docID = id;
+    });
+  }
+
+  // 삭제 확인 다이얼로그 표시 함수
+  Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // 다이얼로그 외부를 탭하여 닫히지 않도록 설정
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('삭제 확인'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('정말로 삭제하시겠습니까?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (docID != null) {
+                  firestoreService.deleteLog(docID!); // 삭제 실행
+                  textController.clear();
+                }
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+                Navigator.of(context).pop(); // 다이얼로그가 닫힌 후에는 이전 페이지로 이동
+              },
+              child: const Text('삭제'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -30,6 +80,19 @@ class _DiarySheetState extends State<DiarySheet> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              onPressed: () {
+                if (docID != null) {
+                  _showDeleteConfirmationDialog(context);
+                }
+              },
+              icon: const Icon(Icons.delete),
+            ),
+          ],
+        ),
       ),
       body: SafeArea(
         child: Column(

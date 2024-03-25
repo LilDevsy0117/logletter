@@ -19,16 +19,15 @@ class MyButton extends StatelessWidget {
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(8),
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Center(
           child: Text(
             buttonname,
             style: const TextStyle(
-              color: Colors.white,
               fontFamily: "NotoSans",
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),

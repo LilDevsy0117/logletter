@@ -10,17 +10,17 @@ class UserBest extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Best log',
               style: TextStyle(
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.inversePrimary,
                 fontFamily: "Blackhansans",
               ),
             ),
-            Row(
+            const Row(
               children: [
                 Padding(
                   padding: EdgeInsets.only(right: 15.0),

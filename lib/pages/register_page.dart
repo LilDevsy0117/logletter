@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logletter/components/login_textfield.dart';
 import 'package:logletter/components/my_button.dart';
+import 'package:logletter/helper/helper_function.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -18,8 +19,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
+  final _userNameController = TextEditingController();
   final _ageController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
 
@@ -28,38 +28,50 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmpasswordController.dispose();
-    _firstNameController.dispose();
-    _lastNameController.dispose();
+    _userNameController.dispose();
     _ageController.dispose();
     super.dispose();
   }
 
   Future signUp() async {
+    // show loading circle
+    showDialog(
+      context: context,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
     if (passwordConfirmed()) {
       // create user
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
+      try {
+        UserCredential? userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
 
-      // add user details
-      addUserDetails(
-        _firstNameController.text.trim(),
-        _lastNameController.text.trim(),
-        _emailController.text.trim(),
-        int.parse(_ageController.text.trim()),
-      );
+        // add user details
+        createUserDocument(userCredential);
+        if (context.mounted) Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        displayMessageToUser(e.code, context);
+      }
     }
   }
 
-  Future addUserDetails(
-      String firstName, String lastName, String email, int age) async {
-    await FirebaseFirestore.instance.collection('users').add({
-      'first name': firstName,
-      'last name': lastName,
-      'email': email,
-      'age': age,
-    });
+  Future<void> createUserDocument(UserCredential? userCredential) async {
+    if (userCredential != null && userCredential.user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.email)
+          .set({
+        'email': userCredential.user!.email,
+        'name': _userNameController.text,
+        'age': int.parse(_ageController.text),
+      });
+    }
   }
 
   bool passwordConfirmed() {
@@ -67,6 +79,8 @@ class _RegisterPageState extends State<RegisterPage> {
         _confirmpasswordController.text.trim()) {
       return true;
     } else {
+      Navigator.pop(context);
+      displayMessageToUser("비밀번호가 일치하지 않습니다!.", context);
       return false;
     }
   }
@@ -74,6 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
           child: SingleChildScrollView(
         child: Column(
@@ -81,38 +96,19 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 60,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                children: [
-                  Text(
-                    "회원 가입",
-                    style: TextStyle(
-                      fontFamily: "NotoSans",
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+            const Text(
+              "logletter",
+              style: TextStyle(
+                fontFamily: "Blackhansans",
+                fontSize: 50,
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(
-              height: 20,
-            ),
-            const SizedBox(
-              height: 10,
+              height: 50,
             ),
             MyTextField(
-              controller: _firstNameController,
-              hintText: '성',
-              obscureText: false,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            MyTextField(
-              controller: _lastNameController,
+              controller: _userNameController,
               hintText: '이름',
               obscureText: false,
             ),
@@ -138,7 +134,7 @@ class _RegisterPageState extends State<RegisterPage> {
             MyTextField(
               controller: _passwordController,
               hintText: '비밀번호',
-              obscureText: false,
+              obscureText: true,
             ),
             const SizedBox(
               height: 10,
@@ -146,7 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
             MyTextField(
               controller: _confirmpasswordController,
               hintText: '비밀번호 확인',
-              obscureText: false,
+              obscureText: true,
             ),
             const SizedBox(
               height: 25,

@@ -27,27 +27,28 @@ class _LoadingLoginState extends State<LoadingLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Log",
-            style: TextStyle(
-              fontFamily: "Blackhansans",
-              fontSize: 40,
-            ),
+    return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Log",
+                style: TextStyle(
+                  fontFamily: "Blackhansans",
+                  fontSize: 40,
+                ),
+              ),
+              Text(
+                "Letter",
+                style: TextStyle(
+                  fontFamily: "Blackhansans",
+                  fontSize: 40,
+                ),
+              ),
+            ],
           ),
-          Text(
-            "Letter",
-            style: TextStyle(
-              fontFamily: "Blackhansans",
-              fontSize: 40,
-            ),
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 }

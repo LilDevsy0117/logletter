@@ -30,27 +30,30 @@ class _UserEditState extends State<UserEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Logging',
               style: TextStyle(
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.inversePrimary,
                 fontFamily: "Blackhansans",
               ),
             ),
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(right: 15.0),
-                  child: Icon(Icons.notifications),
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: Icon(Icons.notifications,
+                      color: Theme.of(context).colorScheme.inversePrimary),
                 ),
-                Icon(Icons.settings),
+                Icon(Icons.settings,
+                    color: Theme.of(context).colorScheme.inversePrimary),
               ],
             ),
           ],

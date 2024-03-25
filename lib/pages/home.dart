@@ -16,17 +16,18 @@ class _UserHomeState extends State<UserHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          foregroundColor: Theme.of(context).colorScheme.inversePrimary,
           elevation: 0,
           automaticallyImplyLeading: false,
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Logletter',
+                'logletter',
                 style: TextStyle(
-                  color: Colors.black,
                   fontFamily: "Blackhansans",
                 ),
               ),
@@ -53,7 +54,6 @@ class _UserHomeState extends State<UserHome> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot document = logsList[index];
                   String docID = document.id;
-
                   Map<String, dynamic> data =
                       document.data() as Map<String, dynamic>;
                   String logText = data['log'];
