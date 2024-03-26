@@ -1,12 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreService {
+  User? user = FirebaseAuth.instance.currentUser;
+
   final CollectionReference logs =
       FirebaseFirestore.instance.collection('logs');
 
+  final CollectionReference users =
+      FirebaseFirestore.instance.collection('users');
+
+// 사용자의 이름 가져오기
+  Future<String> getUserName() async {
+    try {
+      if (user != null) {
+        DocumentSnapshot userDoc = await users.doc(user!.email).get();
+        if (userDoc.exists) {
+          return (userDoc.data() as Map)['name'];
+        }
+      }
+    } catch (e) {
+      print("Error getting user name: $e");
+    }
+    return "unknown";
+  }
+
   // CREATE : add a new log
-  Future<void> addLog(String log, String date) {
+  Future<void> addLog(String log, String date, String name) {
     return logs.add({
+      'name': name,
       'log': log,
       'timestamp': date,
     });
@@ -18,16 +40,21 @@ class FirestoreService {
     return logsStream;
   }
 
-  Stream<QuerySnapshot> getLogById(String date) {
-    final logStream = logs.where('timestamp', isEqualTo: date).snapshots();
+  Stream<QuerySnapshot> getLogById(String date, String name) {
+    final logStream = logs
+        .where('timestamp', isEqualTo: date)
+        .where('name', isEqualTo: name)
+        .snapshots();
     return logStream;
   }
 
-  Future<String> getLogDocumentID(String date) async {
+  Future<String> getLogDocumentID(String date, String user) async {
     String docID = '';
     try {
-      QuerySnapshot querySnapshot =
-          await logs.where('timestamp', isEqualTo: date).get();
+      QuerySnapshot querySnapshot = await logs
+          .where('timestamp', isEqualTo: date)
+          .where('user', isEqualTo: user)
+          .get();
       if (querySnapshot.docs.isNotEmpty) {
         docID = querySnapshot.docs.first.id;
       }

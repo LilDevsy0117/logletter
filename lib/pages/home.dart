@@ -4,7 +4,9 @@ import 'package:logletter/components/user_post.dart';
 import 'package:logletter/firestore.dart';
 
 class UserHome extends StatefulWidget {
-  const UserHome({super.key});
+  const UserHome({
+    super.key,
+  });
 
   @override
   State<UserHome> createState() => _UserHomeState();
@@ -53,12 +55,13 @@ class _UserHomeState extends State<UserHome> {
                 itemCount: logsList.length,
                 itemBuilder: (context, index) {
                   DocumentSnapshot document = logsList[index];
-                  String docID = document.id;
-                  Map<String, dynamic> data =
+
+                  Map<String, dynamic>? data =
                       document.data() as Map<String, dynamic>;
                   String logText = data['log'];
+
                   return UserPosts(
-                    name: docID,
+                    name: data['name'],
                     log: logText,
                   );
                 },

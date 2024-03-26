@@ -16,18 +16,27 @@ class _DiarySheetState extends State<DiarySheet> {
   final TextEditingController textController = TextEditingController();
   late DateTime date;
   late String? docID;
+  late String name = '';
 
   @override
   void initState() {
     super.initState();
     date = widget.selectedDate;
+    getName();
+  }
+
+  void getName() async {
+    String tempname = await firestoreService.getUserName();
+    setState(() {
+      name = tempname;
+    });
     getDocumentID();
   }
 
-  // 문서 ID를 가져오는 함수
+// 문서 ID를 가져오는 함수
   void getDocumentID() async {
-    String id = await firestoreService
-        .getLogDocumentID(DateFormat("yyyy년 MM월 dd일").format(date));
+    String id = await firestoreService.getLogDocumentID(
+        DateFormat("yyyy년 MM월 dd일").format(date), name);
     setState(() {
       docID = id;
     });
@@ -75,9 +84,11 @@ class _DiarySheetState extends State<DiarySheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.background,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        iconTheme:
+            IconThemeData(color: Theme.of(context).colorScheme.inversePrimary),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Row(
@@ -89,7 +100,8 @@ class _DiarySheetState extends State<DiarySheet> {
                   _showDeleteConfirmationDialog(context);
                 }
               },
-              icon: const Icon(Icons.delete),
+              icon: Icon(Icons.delete,
+                  color: Theme.of(context).colorScheme.inversePrimary),
             ),
           ],
         ),
@@ -113,8 +125,8 @@ class _DiarySheetState extends State<DiarySheet> {
                 children: [
                   const ButtonBar(),
                   StreamBuilder<QuerySnapshot>(
-                    stream: firestoreService
-                        .getLogById(DateFormat("yyyy년 MM월 dd일").format(date)),
+                    stream: firestoreService.getLogById(
+                        DateFormat("yyyy년 MM월 dd일").format(date), name),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                         return TextField(
@@ -146,7 +158,7 @@ class _DiarySheetState extends State<DiarySheet> {
                   GestureDetector(
                     onTap: () {
                       firestoreService.addLog(textController.text,
-                          DateFormat("yyyy년 MM월 dd일").format(date));
+                          DateFormat("yyyy년 MM월 dd일").format(date), name);
                       textController.clear();
                       Navigator.pop(context);
                     },
