@@ -63,10 +63,15 @@ class _UserEditState extends State<UserEdit> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TableCalendar(
+            locale: 'ko-KR',
+            daysOfWeekHeight: 30,
             onDaySelected: onDaySelected,
             selectedDayPredicate: (date) {
               return isSameDay(selectedDate, date);
             },
+            calendarStyle: const CalendarStyle(
+              outsideDaysVisible: false,
+            ),
             focusedDay: selectedDate,
             firstDay: DateTime(2020),
             lastDay: DateTime(2030),

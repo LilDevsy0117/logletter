@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     const UserBest(),
     const UserEdit(),
     const UserBookmark(),
-    UserProfile(),
+    const UserProfile(),
   ];
 
   @override
@@ -34,18 +34,25 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         body: _childern[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
           currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).colorScheme.inversePrimary,
+          unselectedItemColor: Theme.of(context).colorScheme.secondary,
+          selectedLabelStyle: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ), // 선택된 라벨 스타일
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ), // 선택되지 않은 라벨 스타일
           onTap: _navigateBottomNavBar,
           type: BottomNavigationBarType.fixed,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'logletter'),
             BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Best'),
-            BottomNavigationBarItem(icon: Icon(Icons.edit), label: 'Edit'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.bookmark), label: 'bookmark'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
+            BottomNavigationBarItem(icon: Icon(Icons.edit), label: 'logging'),
+            BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Sub'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
         ));
   }

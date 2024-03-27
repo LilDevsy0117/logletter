@@ -171,22 +171,24 @@ class _DiarySheetState extends State<DiarySheet> {
                               const BorderRadius.all(Radius.circular(12)),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.shade600,
-                              offset: const Offset(5.0, 5.0),
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                              offset: const Offset(3.0, 3.0),
                               blurRadius: 15.0,
                               spreadRadius: 1.0,
                             ),
-                            const BoxShadow(
-                              color: Colors.white,
-                              offset: Offset(-5.0, -5.0),
+                            BoxShadow(
+                              color: Theme.of(context).colorScheme.primary,
+                              offset: const Offset(-3.0, -3.0),
                               blurRadius: 15.0,
                               spreadRadius: 1.0,
                             )
                           ]),
-                      child: const Center(
+                      child: Center(
                           child: Text(
                         "기록하기",
                         style: TextStyle(
+                          color: Colors.grey[800],
                           fontFamily: "NotoSans",
                           fontSize: 18,
                           fontWeight: FontWeight.w600,

@@ -14,7 +14,7 @@ class UserBookmark extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '구독한 기록',
+              'Subscribe',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontFamily: "Blackhansans",

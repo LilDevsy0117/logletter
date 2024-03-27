@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:logletter/firebase_options.dart';
 import 'package:logletter/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,6 +7,7 @@ import 'package:logletter/theme/dark_mode.dart';
 import 'package:logletter/theme/light_mode.dart';
 
 void main() async {
+  initializeDateFormatting().then((_) => runApp(const MyApp()));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

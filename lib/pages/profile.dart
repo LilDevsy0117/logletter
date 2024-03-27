@@ -1,16 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:logletter/firestore.dart';
 
-class UserProfile extends StatelessWidget {
-  UserProfile({super.key});
+class UserProfile extends StatefulWidget {
+  const UserProfile({super.key});
+
+  @override
+  State<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
   final User? currentUser = FirebaseAuth.instance.currentUser;
+  final FirestoreService firestoreService = FirestoreService();
+  late String name = '';
+  late int numOfLog = 0;
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails() async {
-    return await FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUser!.email)
-        .get();
+  @override
+  void initState() {
+    super.initState();
+    getName();
+  }
+
+  void getName() async {
+    String tempname = await firestoreService.getUserName();
+    setState(() {
+      name = tempname;
+    });
   }
 
   @override
@@ -52,104 +68,102 @@ class UserProfile extends StatelessWidget {
           ],
         ),
       ),
-      body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        future: getUserDetails(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Text("Error: ${snapshot.error}");
-          } else if (snapshot.hasData) {
-            Map<String, dynamic>? user = snapshot.data!.data() ?? {};
-            return Column(
-              children: [
-                Container(
-                  height: 120,
-                  width: 120,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey[200],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    "${user['name'] ?? ''}",
-                    style: const TextStyle(
-                      fontFamily: "NotoSans",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: const Column(
-                          children: [
-                            Text(
-                              '123',
-                              style: TextStyle(
-                                fontFamily: 'Blackhansans',
-                                fontSize: 26,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Likes',
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
+      body: Column(
+        children: [
+          Container(
+            height: 120,
+            width: 120,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey[200],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(
+              name,
+              style: const TextStyle(
+                fontFamily: "NotoSans",
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: const Column(
+                    children: [
+                      Text(
+                        '123',
+                        style: TextStyle(
+                          fontFamily: 'Blackhansans',
+                          fontSize: 26,
                         ),
                       ),
-                    ),
-                    const Expanded(
-                      child: Column(
-                        children: [
-                          Text(
-                            '45',
-                            style: TextStyle(
-                              fontFamily: 'Blackhansans',
-                              fontSize: 26,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Followers',
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Likes',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      '45',
+                      style: TextStyle(
+                        fontFamily: 'Blackhansans',
+                        fontSize: 26,
                       ),
                     ),
-                    Expanded(
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'Followers',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('logs')
+                      .where('name', isEqualTo: name)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      numOfLog = snapshot.data!.docs.length;
+                    }
+                    return Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
-                        child: const Column(
+                        child: Column(
                           children: [
                             Text(
-                              '7',
-                              style: TextStyle(
+                              numOfLog.toString(),
+                              style: const TextStyle(
                                 fontFamily: 'Blackhansans',
                                 fontSize: 26,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
-                            Text(
+                            const Text(
                               'Logs',
                               style: TextStyle(
                                 fontSize: 15,
@@ -158,15 +172,25 @@ class UserProfile extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
+                    );
+                  }),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('logs')
+                  .where('name', isEqualTo: name)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  numOfLog = snapshot.data!.docs.length;
+                }
+                return Expanded(
                     child: GridView.builder(
-                        itemCount: 7,
+                        itemCount: numOfLog,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
@@ -179,13 +203,9 @@ class UserProfile extends StatelessWidget {
                               color: Colors.grey[200],
                             ),
                           );
-                        }))
-              ],
-            );
-          } else {
-            return const Text("No data");
-          }
-        },
+                        }));
+              })
+        ],
       ),
     );
   }

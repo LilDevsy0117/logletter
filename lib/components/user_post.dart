@@ -20,7 +20,7 @@ class UserPosts extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                       shape: BoxShape.circle,
                     ),
                   ),
