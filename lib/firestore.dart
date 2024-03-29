@@ -26,11 +26,16 @@ class FirestoreService {
   }
 
   // CREATE : add a new log
-  Future<void> addLog(String log, String date, String name) {
-    return logs.add({
+  Future<void> addLog(String log, String date, String name) async {
+    DocumentSnapshot useremail = await users.doc(user!.email).get();
+    logs.add({
       'name': name,
       'log': log,
       'timestamp': date,
+      'email': (useremail.data() as Map)['email'],
+      'like': <String>[],
+      'subscribe': <String>[],
+      'comment': <String>[],
     });
   }
 

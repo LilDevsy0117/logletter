@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Widget> _childern = [
-    const UserHome(),
+    UserHome(),
     const UserBest(),
     const UserEdit(),
     const UserBookmark(),

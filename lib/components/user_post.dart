@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 
 class UserPosts extends StatelessWidget {
-  final String name;
   final String log;
-  const UserPosts({super.key, required this.name, required this.log});
+  final String name;
+  final String email;
+  final String time;
+  final List<String> like;
+  final List<String> subscribe;
+  final List<String> comment;
+  const UserPosts({
+    super.key,
+    required this.log,
+    required this.name,
+    required this.email,
+    required this.time,
+    required this.like,
+    required this.subscribe,
+    required this.comment,
+  });
 
   @override
   Widget build(BuildContext context) {
