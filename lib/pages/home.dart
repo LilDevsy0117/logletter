@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:logletter/components/user_post.dart';
 import 'package:logletter/controller/log_controller.dart';
@@ -47,19 +46,12 @@ class UserHome extends StatelessWidget {
         if (logController.logs.isEmpty) {
           return const Center(child: Text("일기가 없습니다..."));
         } else {
-          return PageView.builder(
+          return ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: logController.logs.length,
             itemBuilder: (context, index) {
-              var log = logController.logs[index];
               return UserPosts(
-                name: log.name,
-                log: log.log,
-                email: log.email,
-                time: log.time,
-                like: log.like,
-                subscribe: log.subscribe,
-                comment: log.comment,
+                post: logController.logs[index],
               );
             },
           );

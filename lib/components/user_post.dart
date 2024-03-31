@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:logletter/controller/log_controller.dart';
+import 'package:logletter/model/log.dart';
 
 class UserPosts extends StatelessWidget {
-  final String log;
-  final String name;
-  final String email;
-  final String time;
-  final List<String> like;
-  final List<String> subscribe;
-  final List<String> comment;
-  const UserPosts({
+  final Log post;
+  final LogController logController = Get.find();
+  UserPosts({
     super.key,
-    required this.log,
-    required this.name,
-    required this.email,
-    required this.time,
-    required this.like,
-    required this.subscribe,
-    required this.comment,
+    required this.post,
   });
 
   @override
   Widget build(BuildContext context) {
+    logController.isPostLiked(post);
+
     return Column(
       children: [
         Padding(
@@ -42,7 +36,7 @@ class UserPosts extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
-                    name,
+                    post.name,
                     style: const TextStyle(
                         fontFamily: "NotoSans", fontWeight: FontWeight.bold),
                   ),
@@ -59,7 +53,7 @@ class UserPosts extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              log,
+              post.log,
               style: const TextStyle(
                 fontFamily: "NotoSans",
                 fontSize: 20,
@@ -67,21 +61,42 @@ class UserPosts extends StatelessWidget {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.all(16.0),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  Icon(Icons.favorite),
-                  Padding(
+                  GestureDetector(
+                    onTap: () {
+                      logController.toggleLike(post);
+                    },
+                    child: Obx(
+                      () => Icon(
+                        post.isLiked.value
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: post.isLiked.value ? Colors.red : Colors.white,
+                      ),
+                    ),
+                  ),
+                  const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.0),
                     child: Icon(Icons.chat_bubble_outline),
                   ),
                 ],
               ),
-              Icon(Icons.bookmark),
+              GestureDetector(
+                onTap: () {
+                  logController.toggleSub(post);
+                },
+                child: Obx(
+                  () => Icon(
+                    post.isSubed.value ? Icons.bookmark : Icons.bookmark_border,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

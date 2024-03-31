@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:logletter/model/log.dart';
 
 class FirestoreService {
   User? user = FirebaseAuth.instance.currentUser;
@@ -21,6 +22,20 @@ class FirestoreService {
       }
     } catch (e) {
       print("Error getting user name: $e");
+    }
+    return "unknown";
+  }
+
+  Future<String> getUserEmail() async {
+    try {
+      if (user != null) {
+        DocumentSnapshot userDoc = await users.doc(user!.email).get();
+        if (userDoc.exists) {
+          return (userDoc.data() as Map)['email'];
+        }
+      }
+    } catch (e) {
+      print("Error getting user email: $e");
     }
     return "unknown";
   }
@@ -53,12 +68,12 @@ class FirestoreService {
     return logStream;
   }
 
-  Future<String> getLogDocumentID(String date, String user) async {
+  Future<String> getLogDocumentID(String date, String mail) async {
     String docID = '';
     try {
       QuerySnapshot querySnapshot = await logs
+          .where('email', isEqualTo: mail)
           .where('timestamp', isEqualTo: date)
-          .where('user', isEqualTo: user)
           .get();
       if (querySnapshot.docs.isNotEmpty) {
         docID = querySnapshot.docs.first.id;
@@ -66,15 +81,21 @@ class FirestoreService {
     } catch (e) {
       print("Error getting document ID: $e");
     }
+
     return docID;
   }
 
   // UPDATE : update notes given a doc id
-  Future<void> updateLog(String docID, String newLog) {
-    return logs.doc(docID).update({
-      'log': newLog,
-      'timestamp': Timestamp.now(),
-    });
+  Future<void> updateLikeSub(Log log) async {
+    String docID = await getLogDocumentID(log.time, log.email);
+    try {
+      await logs.doc(docID).update({
+        'like': log.like,
+        'subscribe': log.subscribe,
+      });
+    } catch (e) {
+      print("Error updating log: $e");
+    }
   }
 
   // DELETE: delete logs given a doc id

@@ -36,7 +36,8 @@ class _DiarySheetState extends State<DiarySheet> {
 // 문서 ID를 가져오는 함수
   void getDocumentID() async {
     String id = await firestoreService.getLogDocumentID(
-        DateFormat("yyyy년 MM월 dd일").format(date), name);
+        DateFormat("yyyy년 MM월 dd일").format(date),
+        firestoreService.user!.email!);
     setState(() {
       docID = id;
     });

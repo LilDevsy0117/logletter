@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class Log {
   final String log;
   final String name;
@@ -6,7 +8,8 @@ class Log {
   final List<String> like;
   final List<String> subscribe;
   final List<String> comment;
-
+  var isLiked = false.obs;
+  var isSubed = false.obs;
   Log({
     required this.log,
     required this.name,
