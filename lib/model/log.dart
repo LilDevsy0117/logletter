@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 class Log {
+  final String docID;
   final String log;
   final String name;
   final String email;
@@ -11,6 +12,7 @@ class Log {
   var isLiked = false.obs;
   var isSubed = false.obs;
   Log({
+    required this.docID,
     required this.log,
     required this.name,
     required this.email,

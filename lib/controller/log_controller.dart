@@ -26,6 +26,7 @@ class LogController extends GetxController {
       logs.value = querySnapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
         return Log(
+          docID: doc.id,
           log: data['log'] ?? '',
           name: data['name'] ?? '',
           email: data['email'] ?? '',
