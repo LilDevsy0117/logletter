@@ -29,22 +29,24 @@ class _LoadingLoginState extends State<LoadingLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: const Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Log",
+              Image.asset('assets/images/logo.png'),
+              const Text(
+                "Log Letter",
                 style: TextStyle(
                   fontFamily: "Blackhansans",
                   fontSize: 40,
+                  color: Color.fromARGB(255, 91, 102, 202),
                 ),
               ),
-              Text(
-                "Letter",
+              const Text(
+                "감정을 쓰고 나누는, 익명의 일기 앱",
                 style: TextStyle(
-                  fontFamily: "Blackhansans",
-                  fontSize: 40,
+                  fontFamily: "NotoSans",
+                  fontSize: 20,
                 ),
               ),
             ],

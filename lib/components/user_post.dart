@@ -34,6 +34,7 @@ class UserPosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     logController.isPostLiked(post);
+    logController.isPostSub(post);
 
     return Column(
       children: [

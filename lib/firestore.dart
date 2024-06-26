@@ -55,7 +55,7 @@ class FirestoreService {
   }
 
   // READ: get notes from database
-  Stream<QuerySnapshot> getLogsSteram() {
+  Stream<QuerySnapshot> getLogsStream() {
     final logsStream = logs.orderBy('timestamp', descending: true).snapshots();
     return logsStream;
   }
@@ -86,11 +86,21 @@ class FirestoreService {
   }
 
   // UPDATE : update notes given a doc id
-  Future<void> updateLikeSub(Log log) async {
+  Future<void> updateLike(Log log) async {
     String docID = await getLogDocumentID(log.time, log.email);
     try {
       await logs.doc(docID).update({
         'like': log.like,
+      });
+    } catch (e) {
+      print("Error updating log: $e");
+    }
+  }
+
+  Future<void> updateSub(Log log) async {
+    String docID = await getLogDocumentID(log.time, log.email);
+    try {
+      await logs.doc(docID).update({
         'subscribe': log.subscribe,
       });
     } catch (e) {
