@@ -34,7 +34,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         body: _childern[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           currentIndex: _selectedIndex,
+          elevation: 0,
           selectedItemColor: Theme.of(context).colorScheme.inversePrimary,
           unselectedItemColor: Theme.of(context).colorScheme.secondary,
           selectedLabelStyle: const TextStyle(
